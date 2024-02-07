@@ -1,4 +1,6 @@
 const Product = require('../models/product');
+const mongoose = require('mongoose');
+
 
 // GET all products
 const getAllProducts = async (req, res) => {
@@ -23,6 +25,7 @@ const getProductById = async (req, res) => {
 // POST a new product
 const createProduct = async (req, res) => {
     const product = new Product({
+        _id: new mongoose.Types.ObjectId(),
         nom: req.body.nom,
         prix: req.body.prix,
         categorie: req.body.categorie,

@@ -3,10 +3,10 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const productRoutes = require('./api/routes/product')
+const productRoutes = require('./api/routes/product');
 
 
-//mongoose.connect()
+mongoose.connect('mongodb+srv://alaeddinebenmimoun:2HLVGkii4th2Y8xj@cluster0.alwpmdy.mongodb.net/?retryWrites=true&w=majority');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
