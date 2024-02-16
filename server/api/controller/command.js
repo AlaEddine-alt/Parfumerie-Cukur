@@ -1,11 +1,13 @@
 // controllers/commandController.js
 const Command = require('../models/command');
+const mongoose = require('mongoose');
+const Orderitem = require ('../models/orderitem');
 
 // Create a new command
 exports.createCommand = async (req, res) => {
 
     const command = new Command({
-        _id_commande: new mongoose.Types.ObjectId(),
+        _id: new mongoose.Types.ObjectId(),
         adresse_commande:req.body.adresse_commande,
         total_amount:req.body.total_amount
     });
@@ -15,26 +17,24 @@ exports.createCommand = async (req, res) => {
 
         for(const item of tab)
         {
-          item._id_commande=command._id_commande;
-          item._id_orderitem= new mongoose.Types.ObjectId();
+          const orderitem = new Orderitem ({
+            _id : new mongoose.Types.ObjectId(),
+            _id_command : command._id ,
+            _id_product : item._id,
+            quantity : item.quantity
+          })
+          try {
+            const newOrderitem = await orderitem.save();
+            console.log("data inserted")
+        } catch (error) {
+            res.status(400).json({ message: error.message });
         }
-        User.insertMany(tab).then( () => {
-            console.log("Data inserted") // Success 
-        }).catch( (error) => {
-            console.log(error)     // Failure 
-        });
-
-        res.status(201).json(newCommand);
-
-        
+        }
+        res.status(201).json(newCommand);    
 
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
-
-    
-    
-
   };
 
 
