@@ -50,7 +50,7 @@ const getAllUsers = async (req, res) => {
 //GetUserById(GET BY ID)
 const GetUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params._id);
+        const user = await User.findById(req.params.id);
         res.json(user);
     }
     catch (error) {
