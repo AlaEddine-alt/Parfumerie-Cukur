@@ -4,7 +4,19 @@ const userController = require('../controller/user');
 
 
 
-//singup 
+//getAllUsers
+router.get('/', userController.getAllUsers);
+//getUserById
+router.get('/:id', userController.GetUserById);
+//signUp 
 router.post('/signup', userController.signUp);
+//update
+router.patch('/:id', userController.updateUser);
+//Delete
+router.delete('/:id', userController.deleteUser);
+
+
+
+
 
 module.exports = router;
