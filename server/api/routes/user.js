@@ -5,6 +5,6 @@ const userController = require ('../controller/user');
 
 
 //singup 
-router.post ('/singup', userController.SignUp);
+router.post ('/SignUp', userController.SignUp);
 
 module.exports = router; 

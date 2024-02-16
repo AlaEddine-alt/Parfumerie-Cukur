@@ -1,25 +1,29 @@
 const mongoose = require ('mongoose');
 const User=require('../models/user');
-
-const SingUp  =  async (req , res) => {
-    const user= new User({
-        _id : new mongoose.Types.ObjectId(),
-        name:req.body.name,
-        mail:req.body.mail,
-        password:bcrypt.hashSync(req.body.password,10),
-        phone:req.body.phone,
-        adresse : req.body.adresse
-    
-        })
-
-        try{
-            const newUser = await user.save();
-            res.status(201).json(newUser);
-        } catch (error) {
-            res.status(400).json({ message: error.message });
-        }
-        
-         //10 salt , eli besh nzidouh lel password kbal maysir hash 
-    }
+const bcrypt = require ('bcryptjs');
 
 
+const SignUp  =  async (req , res) => {
+	try {
+		const user = new User ({
+			_id : new mongoose.Types.ObjectId(),
+			name : req.body.name,
+			mail : req.body.mail,
+			password : bcrypt.hashSync(req.body.password , 10),
+            adresse : req.body.adresse , 
+            phone : req.body.phone
+		})
+		const saveduser = await user.save();
+		if (! saveduser )
+			res.status(500).json ({error : 'user cannot be created' });
+		else 
+		    res.status(201).json (saveduser);
+	}
+	catch(error) {
+		console.error(error);
+		res.status(500).json ({error : 'Internal server error'});
+	}
+    };
+
+    module.exports = {SignUp,
+    };
