@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 //signUp(POST)
 const signUp = async (req, res) => {
@@ -75,7 +76,52 @@ const updateUser = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
-
+//SignIn
+const signIn = async (req, res) => {
+    User.find({ mail: req.body.mail })
+        .exec()
+        .then(
+            user => {                             //result mtaa User.find besh tjina fi ARRAY esmou user
+                if (user.length < 1) {
+                    return res.status(401).json({             // we don't send 404 and message : "mail doesn't exist" beacause hackers can  try different email and they can know which ones exit in our data base 
+                        message: 'Auth failed 1'
+                    });
+                }
+                bcrypt.compare(req.body.password, user[0].password, (err, result) => {       //result bool , check documentation
+                    if (err) {
+                        return res.status(401).json({
+                            message: 'Auth failed 2'
+                        });
+                    }
+                    if (result) {
+                        const token = jwt.sign(
+                            {
+                                mail: user[0].mail,
+                                _id: user[0]._id
+                            },
+                            "secretAZIZ",                //lezem yebtbadel men hné 
+                            {
+                                expiresIn: "1h"
+                            }
+                        );
+                        return res.status(200).json({
+                            message: 'Auth successful',
+                            token: token
+                        });
+                    }
+                    res.status(401).json({
+                        message: 'Auth failed 3'              //3malet nwemer fil msg , besh naaref el erreur mnin
+                    });
+                });
+            }
+        )
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        })
+}
 
 
 module.exports = {
@@ -84,4 +130,5 @@ module.exports = {
     deleteUser,
     updateUser,
     getAllUsers,
+    signIn,
 };
