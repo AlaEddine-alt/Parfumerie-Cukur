@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
 //signUp(POST)
-const signUp = async (req, res) => {
-    bcrypt.hash(req.body.password, 10, (err, hash) => {         //bcrypt tekhou 3 params : 1)pass2)salt3)err,hash 
+const signUp = (req, res) => {
+    bcrypt.hash(req.body.password, 10, async (err, hash) => {         //bcrypt tekhou 3 params : 1)pass2)salt3)err,hash 
         if (err)                                                //ken fama err when cyrpting the password
         {
             return res.status(500).json({
@@ -23,7 +23,7 @@ const signUp = async (req, res) => {
                 phone: req.body.phone,
                 adresse: req.body.adresse
             });
-            user.save()
+            await user.save()
                 .then(result => {
                     console.log(result);
                     res.status(201).json({
@@ -59,6 +59,7 @@ const GetUserById = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 //DeleteUserById(DELETE BY ID)
 const deleteUser = async (req, res) => {
     try {
@@ -68,6 +69,7 @@ const deleteUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 //UpdateUserById(UPDATE BY ID)
 const updateUser = async (req, res) => {
     try {

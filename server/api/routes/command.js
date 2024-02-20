@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Command = require('../models/command');
 const commandController = require('../controller/command');
+const auth = require('../../middleware/auth');
 
 // GET all Commands
 router.get('/', commandController.getAllCommands);
@@ -11,7 +12,7 @@ router.get('/', commandController.getAllCommands);
 router.get('/:commandId', commandController.getCommandById);
 
 // POST a new command
-router.post('/', commandController.createCommand);
+router.post('/',auth, commandController.createCommand);
 
 // PATCH/update a command by ID
 router.patch('/:commandId', commandController.updateCommand);

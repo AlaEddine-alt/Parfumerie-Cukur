@@ -1,42 +1,33 @@
 const mongoose = require('mongoose');
 const Command = require('../models/command');
+const Orderitem = require('../models/orderitem');
+
 
 // Create a new command
-exports.createCommand = async (req, res) => {
-
-    const command = new Command({
-        _id_commande: new mongoose.Types.ObjectId(),
-        adresse_commande:req.body.adresse_commande,
-        total_amount:req.body.total_amount
-    });
-    try {
-        const newCommand = await command.save();
-        const tab=req.body.tab;
-
-        for(const item of tab)
-        {
-          item._id_commande=command._id_commande;
-          item._id_orderitem= new mongoose.Types.ObjectId();
-        }
-        User.insertMany(tab).then( () => {
-            console.log("Data inserted") // Success 
-        }).catch( (error) => {
-            console.log(error)     // Failure 
-        });
-
-        res.status(201).json(newCommand);
-
-        
-
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-
-    
-    
-
-  };
-
+exports.createCommand = async (req , res) => {
+const command = new Command({
+  _id: new mongoose. Types.ObjectId(),
+  adresse_commande: req.body.adresse_commande,
+  total_amount: req.body.total_amount
+});
+try {
+  const newCommand = await command.save();
+  const tab = req.body.tab;
+  for (const item of tab) {
+  const orderitem = new Orderitem({
+    _id: new mongoose. Types.ObjectId(),
+    _id_product: item._id,
+    quantity: item.quantity,
+    _id_command: command._id
+});
+const newOrderitem = await orderitem.save();
+}
+console.log("Data inserted")
+res.status (201).json (newCommand);
+} catch (error) {
+res.status (400).json({ message: error.message });
+}
+}
 
 // Get all commands
 exports.getAllCommands = async (req, res) => {
