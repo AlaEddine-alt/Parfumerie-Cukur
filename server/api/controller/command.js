@@ -12,6 +12,7 @@ exports.createCommand = async (req, res) => {
   try {
     const newCommand = await command.save();
     const tab = req.body.tab;
+    const orderItems = [];
     for (const item of tab) {
       const orderitem = new Orderitem({
         _id: new mongoose.Types.ObjectId(),
@@ -19,8 +20,9 @@ exports.createCommand = async (req, res) => {
         quantity: item.quantity,
         _id_command: command._id
       });
-      const newOrderitem = await orderitem.save();
+      orderItems.push(orderitem);
     }
+    await Orderitem.create(orderItems)
     console.log("Data inserted")
     res.status(201).json(newCommand);
   } catch (error) {
@@ -39,6 +41,7 @@ exports.getAllCommands = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 // Get a specific command by ID
 exports.getCommandById = async (req, res) => {
