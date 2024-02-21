@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 //signUp(POST)
 const signUp = async (req, res) => {
@@ -99,7 +100,7 @@ const signIn = async (req, res) => {
                                 mail: user[0].mail,
                                 _id: user[0]._id
                             },
-                            "secretAZIZ",                //lezem yebtbadel men hné 
+                            process.env.JWT_SECRET,                //lezem yebtbadel men hné 
                             {
                                 expiresIn: "1h"
                             }
