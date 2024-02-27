@@ -73,9 +73,21 @@ const deleteUser = async (req, res) => {
 //UpdateUserById(UPDATE BY ID)
 const updateUser = async (req, res) => {
     try {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(updatedUser);
-    } catch (error) {
+        bcrypt.hash(req.body.password, 10, async (err, hash) => {         
+        if (err)                                                
+        {
+            return res.status(500).json({
+                error: err
+            });
+        }
+        else                                                  
+        {   req.body.password = hash;
+            const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            res.json(updatedUser);
+    }});
+    }
+    catch (error)
+    {
         res.status(400).json({ message: error.message });
     }
 };

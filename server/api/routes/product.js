@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const Product = require('../models/product');
 const productController = require('../controller/product');
+const auth = require('../../middleware/auth');
+
 
 
 
@@ -13,13 +13,13 @@ router.get('/', productController.getAllProducts);
 router.get('/:productId', productController.getProductById);
 
 // POST a new product
-router.post('/', productController.createProduct);
+router.post('/',auth, productController.createProduct);
 
 // PATCH/update a product by ID
-router.patch('/:productId', productController.updateProduct);
+router.patch('/:productId',auth, productController.updateProduct);
 
 // DELETE a product by ID
-router.delete('/:productId', productController.deleteProduct);
+router.delete('/:productId',auth, productController.deleteProduct);
 
 
 

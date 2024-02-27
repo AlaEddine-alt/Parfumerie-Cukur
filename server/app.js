@@ -13,13 +13,13 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cl
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/products', productRoutes);
+app.use('/product', productRoutes);
 app.use('/command', commandRoutes);
-app.use ('/users',userRoutes);
+app.use ('/user',userRoutes);
 app.use((req, res, next) => {
     const error = new Error;
     error.status = 404;
-    error.message = 'NOT FOUND'
+    error.message = 'NOT FOUND, PLEASE CHECK YOUR URL';
     res.json(error)
 });
 
