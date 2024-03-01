@@ -21,7 +21,8 @@ const signUp = (req, res) => {
                 mail: req.body.mail,
                 password: hash,                             // pass mahtout fil hash
                 phone: req.body.phone,
-                adresse: req.body.adresse
+                adresse: req.body.adresse,
+                role: req.body.role
             });
             await user.save()
                 .then(result => {
@@ -112,7 +113,8 @@ const signIn = async (req, res) => {
                         const token = jwt.sign(
                             {
                                 mail: user[0].mail,
-                                _id: user[0]._id
+                                _id: user[0]._id,
+                                role: user[0].role          //role mtaa user[0] fil data base
                             },
                             process.env.JWT_SECRET,                //lezem yebtbadel men hné 
                             {

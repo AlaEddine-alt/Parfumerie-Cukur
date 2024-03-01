@@ -1,0 +1,16 @@
+{
+    "roles": [
+      {
+        "name": "admin",
+        "permissions": [
+          "delete_user",
+          "read_record"]
+    },
+    {
+        "name": "moderator",
+        "permissions": [
+          
+        ]
+    }
+    ]
+}
