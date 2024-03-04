@@ -8,9 +8,9 @@ const rbacMiddleware = require('../../middleware/rbacMiddleware');
 
 
 //getAllUsers
-router.get('/',auth, userController.getAllUsers);
+router.get('/',auth,rbacMiddleware.checkPermission('get_users'), userController.getAllUsers);
 //getUserById
-router.get('/:id',auth, userController.GetUserById);
+router.get('/:id',auth,rbacMiddleware.checkPermission('get_user'), userController.GetUserById);
 //update
 router.patch('/:id',auth, userController.updateUser);
 //Delete

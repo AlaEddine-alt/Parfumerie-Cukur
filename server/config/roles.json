@@ -2,15 +2,31 @@
     "roles": [
       {
         "name": "admin",
-        "permissions": [
+        "permissions":
+         [
+          "get_user",
+          "get_users",
           "delete_user",
-          "read_record"]
-    },
-    {
-        "name": "moderator",
-        "permissions": [
           
+          "get_commands",
+          "get_command",
+
+          "add_product",
+          "update_product",
+          "delete_product"
+         ]
+      },
+      {
+        "name": "moderator",
+        "permissions": 
+        [
+          "get_commands",
+          "get_command",
+
+          "add_product",
+          "update_product",
+          "delete_product"
         ]
-    }
+      }
     ]
 }

@@ -3,6 +3,7 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const auth = require ("../../middleware/auth");
 
 //signUp(POST)
 const signUp = (req, res) => {
@@ -73,23 +74,41 @@ const deleteUser = async (req, res) => {
 
 //UpdateUserById(UPDATE BY ID)
 const updateUser = async (req, res) => {
-    try {
-        bcrypt.hash(req.body.password, 10, async (err, hash) => {         
-        if (err)                                                
-        {
-            return res.status(500).json({
-                error: err
-            });
-        }
-        else                                                  
-        {   req.body.password = hash;
-            const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
-            res.json(updatedUser);
-    }});
-    }
-    catch (error)
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken._id; 
+    if (userId === req.params.id)
     {
-        res.status(400).json({ message: error.message });
+        try {
+            if (req.body.password)
+            {  
+                bcrypt.hash(req.body.password, 10, async (err, hash) => {         
+                if (err)                                                
+                {
+                    return res.status(500).json({
+                        error: err
+                    });
+                }
+                else                                                  
+                {   req.body.password = hash;
+                    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+                    res.json(updatedUser);
+                }});
+            }
+            else
+            {   
+                const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+                res.json(updatedUser);
+            }
+        }
+        catch (error)
+        {
+            res.status(400).json({ message: error.message });
+        }
+    }
+    else 
+    {
+        res.status(400).json({ message: "you are not allowed to update this user"});
     }
 };
 //SignIn
